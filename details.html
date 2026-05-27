@@ -1,65 +1,70 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تفاصيل المرجع</title>
+    <title>Reference Details</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="details.css">
 </head>
 <body>
     <div class="details-container">
-        <!-- رأس الصفحة -->
+        <!-- Header -->
         <div class="details-header">
             <button class="back-btn" onclick="goBack()">←</button>
             <div class="reference-number" id="referenceNumber">787</div>
             <button class="add-btn" onclick="openAddModal()">+</button>
         </div>
 
-        <!-- منطقة المحتوى -->
+        <!-- Search Section -->
+        <div class="search-section" style="margin: 0; border-radius: 0;">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search references...">
+        </div>
+
+        <!-- Content Area -->
         <div class="details-content">
             <div id="referencesList" class="references-list">
                 <div class="empty-state">
                     <div class="empty-icon">📁</div>
-                    <p class="empty-title">لا توجد مراجع حتى الآن</p>
-                    <p class="empty-subtitle">اضغط + لإضافة أول مرجع</p>
-                    <button class="add-reference-btn" onclick="openAddModal()">+ إضافة مرجع</button>
+                    <p class="empty-title">No references yet</p>
+                    <p class="empty-subtitle">Click + to add your first reference</p>
+                    <button class="add-reference-btn" onclick="openAddModal()">+ Add Reference</button>
                 </div>
             </div>
         </div>
 
-        <!-- نموذج إضافة مرجع جديد -->
+        <!-- Add Reference Modal -->
         <div id="addModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>إضافة مرجع جديد</h2>
+                    <h2>Add New Reference</h2>
                     <button class="close-btn" onclick="closeAddModal()">&times;</button>
                 </div>
 
                 <form id="addReferenceForm" class="form">
                     <div class="form-group">
-                        <label for="refName">الاسم:</label>
-                        <input type="text" id="refName" placeholder="أدخل الاسم" required>
+                        <label for="refName">Name:</label>
+                        <input type="text" id="refName" placeholder="Enter name" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="refDescription">الوصف:</label>
-                        <input type="text" id="refDescription" placeholder="أدخل الوصف" required>
+                        <label for="refAMM1">AMM 1:</label>
+                        <input type="text" id="refAMM1" placeholder="Enter AMM 1" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="refAMM">AMM:</label>
-                        <input type="text" id="refAMM" placeholder="أدخل رقم AMM" required>
+                        <label for="refAMM2">AMM 2:</label>
+                        <input type="text" id="refAMM2" placeholder="Enter AMM 2" required>
                     </div>
 
                     <div class="form-group">
                         <label for="refPN">P/N:</label>
-                        <input type="text" id="refPN" placeholder="أدخل P/N" required>
+                        <input type="text" id="refPN" placeholder="Enter P/N" required>
                     </div>
 
                     <div class="form-actions">
-                        <button type="button" class="cancel-btn" onclick="closeAddModal()">إلغاء</button>
-                        <button type="submit" class="save-btn">حفظ</button>
+                        <button type="button" class="cancel-btn" onclick="closeAddModal()">Cancel</button>
+                        <button type="submit" class="save-btn">Save</button>
                     </div>
                 </form>
             </div>
