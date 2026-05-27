@@ -9,11 +9,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const refNumber = getReferenceNumber();
     document.getElementById('referenceNumber').textContent = refNumber;
     loadReferences(refNumber);
+    
+    // إضافة event listener للنموذج بعد التحميل
+    const modal = document.getElementById('addModal');
+    if (modal) {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddModal();
+            }
+        });
+    }
+    
+    // إضافة event listener للفورم
+    const form = document.getElementById('addReferenceForm');
+    if (form) {
+        form.addEventListener('submit', handleFormSubmit);
+    }
 });
 
 // تحميل المراجع من الملف
 function loadReferences(refNumber) {
-    // محاكاة جلب البيانات من ملف JSON
     fetch(`references-${refNumber}.json`)
         .then(response => {
             if (response.ok) {
@@ -22,7 +37,6 @@ function loadReferences(refNumber) {
             return [];
         })
         .catch(() => {
-            // إذا لم يكن الملف موجوداً، استخدم مصفوفة فارغة
             return [];
         })
         .then(data => {
@@ -74,17 +88,26 @@ function displayReferences(references) {
 
 // فتح نموذج الإضافة
 function openAddModal() {
-    document.getElementById('addModal').classList.add('active');
+    const modal = document.getElementById('addModal');
+    if (modal) {
+        modal.classList.add('active');
+    }
 }
 
 // إغلاق نموذج الإضافة
 function closeAddModal() {
-    document.getElementById('addModal').classList.remove('active');
-    document.getElementById('addReferenceForm').reset();
+    const modal = document.getElementById('addModal');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+    const form = document.getElementById('addReferenceForm');
+    if (form) {
+        form.reset();
+    }
 }
 
-// حفظ المرجع الجديد
-document.getElementById('addReferenceForm').addEventListener('submit', function(e) {
+// معالج إرسال الفورم
+function handleFormSubmit(e) {
     e.preventDefault();
 
     const refNumber = getReferenceNumber();
@@ -109,10 +132,9 @@ document.getElementById('addReferenceForm').addEventListener('submit', function(
             // إضافة المرجع الجديد
             references.push(newReference);
             
-            // محاكاة حفظ البيانات
             console.log(`تم حفظ البيانات في references-${refNumber}.json:`, references);
             
-            // إرسال البيانات إلى الخادم (يجب تطبيق هذا على الخادم الفعلي)
+            // إرسال البيانات إلى الخادم
             saveReferencesToServer(refNumber, references);
 
             // تحديث العرض
@@ -124,12 +146,10 @@ document.getElementById('addReferenceForm').addEventListener('submit', function(
             // عرض رسالة نجاح
             showSuccessMessage('تم حفظ المرجع بنجاح!');
         });
-});
+}
 
 // حفظ المراجع على الخادم
 function saveReferencesToServer(refNumber, references) {
-    // هذه الدالة يجب أن تكون على الخادم
-    // يمكن استخدام fetch API لإرسال البيانات
     fetch('save-reference.php', {
         method: 'POST',
         headers: {
@@ -201,10 +221,3 @@ function showSuccessMessage(message) {
 function goBack() {
     window.history.back();
 }
-
-// إغلاق النموذج بالضغط على خارجه
-document.getElementById('addModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeAddModal();
-    }
-});
