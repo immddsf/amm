@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AMM Reference - الصفحة الرئيسية</title>
+    <title>AMM Reference</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
             <h2 class="section-title">المراجع السريعة</h2>
             
             <div class="reference-cards">
-                <div class="reference-card">
+                <div class="reference-card" onclick="openReference('321')">
                     <div class="card-icon">📄</div>
                     <div class="card-content">
                         <div class="card-number">321</div>
@@ -32,7 +32,7 @@
                     <div class="card-arrow">›</div>
                 </div>
 
-                <div class="reference-card">
+                <div class="reference-card" onclick="openReference('330')">
                     <div class="card-icon">📄</div>
                     <div class="card-content">
                         <div class="card-number">330</div>
@@ -41,7 +41,7 @@
                     <div class="card-arrow">›</div>
                 </div>
 
-                <div class="reference-card">
+                <div class="reference-card" onclick="openReference('777')">
                     <div class="card-icon">📄</div>
                     <div class="card-content">
                         <div class="card-number">777</div>
@@ -50,7 +50,7 @@
                     <div class="card-arrow">›</div>
                 </div>
 
-                <div class="reference-card">
+                <div class="reference-card" onclick="openReference('787')">
                     <div class="card-icon">📄</div>
                     <div class="card-content">
                         <div class="card-number">787</div>
@@ -61,9 +61,9 @@
             </div>
         </div>
 
-        <button class="admin-button">
+        <button class="admin-button" onclick="openAdminPanel()">
             <span class="lock-icon">🔒</span>
-            لوحة التحكم
+            Admin Panel
         </button>
     </div>
 
