@@ -3,52 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>استرجاع كلمة المرور</title>
+<title>إرسال رمز التحقق</title>
 
 <style>
 body {
-    font-family: Arial, sans-serif;
-    background: #f2f2f2;
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-family: Arial;
+    background:#f2f2f2;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
 }
 
 .box {
-    background: white;
-    width: 320px;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 0 10px #ccc;
-    text-align: center;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    width:300px;
 }
 
-input, button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    box-sizing: border-box;
-    font-size: 16px;
-    border-radius: 8px;
-}
-
-input {
-    border: 1px solid #ccc;
+input,button {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    box-sizing:border-box;
 }
 
 button {
-    background: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
+    background:#007bff;
+    color:white;
+    border:0;
+    border-radius:8px;
 }
 
 #result {
-    margin-top: 15px;
-    word-break: break-word;
+    margin-top:15px;
 }
 </style>
 
@@ -58,11 +47,11 @@ button {
 
 <div class="box">
 
-<h3>نسيت كلمة المرور</h3>
+<h3>استرجاع كلمة المرور</h3>
 
-<input id="phone" type="text" placeholder="رقم الجوال">
+<input id="phone" placeholder="رقم الجوال">
 
-<button onclick="send()">إرسال</button>
+<button onclick="sendCode()">إرسال</button>
 
 <div id="result"></div>
 
@@ -71,45 +60,49 @@ button {
 
 <script>
 
-function send(){
+async function sendCode(){
 
-    let phone = document.getElementById("phone").value;
-    let result = document.getElementById("result");
+let phone = document.getElementById("phone").value;
+let result = document.getElementById("result");
 
-    if(!phone){
-        result.innerHTML = "اكتب رقم الجوال";
-        return;
-    }
-
-    result.innerHTML = "جاري الإرسال...";
+result.innerHTML = "جاري الإرسال...";
 
 
-    fetch("send.php", {
-        method:"POST",
-        headers:{
-            "Content-Type":"application/x-www-form-urlencoded"
-        },
-        body:"email=" + encodeURIComponent(phone)
-    })
+try {
 
-    .then(response => response.json())
+let res = await fetch(
+"https://sdcappsa.com/api/v3/119/users/password/forget",
+{
+method:"POST",
 
-    .then(data => {
+headers:{
+"Content-Type":"application/json",
+"Accept":"application/json",
+"Accept-Language":"ar"
+},
 
-        result.innerHTML = JSON.stringify(data);
+body:JSON.stringify({
+email:phone
+})
 
-    })
+});
 
-    .catch(error => {
 
-        result.innerHTML = "خطأ: " + error.message;
+let data = await res.json();
 
-    });
+result.innerHTML = data.message;
+
+
+} catch(e){
+
+result.innerHTML = "خطأ: " + e.message;
+console.log(e);
+
+}
 
 }
 
 </script>
-
 
 </body>
 </html>
