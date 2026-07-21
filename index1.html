@@ -2,66 +2,42 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>اختبار إرسال OTP</title>
-
+<title>استرجاع كلمة المرور</title>
 <style>
-body{
-    margin:0;
-    font-family:Tahoma,Arial,sans-serif;
-    background:#f4f4f4;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+body {
+    font-family: Arial;
+    background: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-.box{
-    width:360px;
-    background:#fff;
-    padding:25px;
-    border-radius:12px;
-    box-shadow:0 0 15px rgba(0,0,0,.15);
-    text-align:center;
+.box {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 300px;
+    box-shadow: 0 0 10px #ccc;
 }
 
-h2{
-    margin-bottom:20px;
+input, button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    font-size: 16px;
 }
 
-input{
-    width:100%;
-    padding:12px;
-    font-size:16px;
-    border:1px solid #ccc;
-    border-radius:8px;
-    box-sizing:border-box;
-    margin-bottom:15px;
+button {
+    background: #007bff;
+    color: white;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
-button{
-    width:100%;
-    padding:12px;
-    background:#007bff;
-    color:#fff;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#005ec2;
-}
-
-#result{
-    margin-top:20px;
-    background:#f1f1f1;
-    padding:10px;
-    border-radius:8px;
-    text-align:left;
-    white-space:pre-wrap;
-    word-break:break-word;
+#result {
+    margin-top: 15px;
 }
 </style>
 </head>
@@ -69,61 +45,52 @@ button:hover{
 <body>
 
 <div class="box">
+    <h3>نسيت كلمة المرور</h3>
 
-<h2>إرسال رمز التحقق</h2>
+    <input id="phone" type="text" placeholder="رقم الجوال">
 
-<input
-id="phone"
-type="text"
-placeholder="+9665XXXXXXXX">
+    <button onclick="sendRequest()">إرسال</button>
 
-<button onclick="sendOTP()">
-إرسال
-</button>
-
-<div id="result"></div>
-
+    <div id="result"></div>
 </div>
 
+
 <script>
+async function sendRequest() {
 
-async function sendOTP(){
+    let phone = document.getElementById("phone").value;
 
-const phone=document.getElementById("phone").value;
+    let result = document.getElementById("result");
+    result.innerHTML = "جاري الإرسال...";
 
-document.getElementById("result").innerHTML="جاري الإرسال...";
 
-try{
+    let response = await fetch(
+        "https://sdcappsa.com/api/v3/119/users/password/forget",
+        {
+            method: "POST",
 
-const response=await fetch("https://denden.my.taker.io/api/v3/auth/authorize",{
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-Localization": "ar",
 
-method:"POST",
+                // ضع القيم الصحيحة هنا
+                "Timestamp": "1784640512",
+                "Nonce": "9c9b337879bfb67ca2b4886714335576",
+                "Signature": "fe8a4c9e740d63b49008b0ce2198da631e635746bec78259379023e70526060d"
+            },
 
-headers:{
-"Content-Type":"application/json",
-"Accept":"application/json"
-},
+            body: JSON.stringify({
+                email: phone
+            })
+        }
+    );
 
-body:JSON.stringify({
-phone_number:phone
-})
 
-});
+    let data = await response.text();
 
-const data=await response.json();
-
-document.getElementById("result").innerHTML=
-"<pre>"+JSON.stringify(data,null,2)+"</pre>";
-
-}catch(e){
-
-document.getElementById("result").innerHTML=
-"خطأ:<br>"+e;
-
+    result.innerHTML = data;
 }
-
-}
-
 </script>
 
 </body>
