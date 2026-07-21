@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>صفحة تسجيل الدخول</title>
+</head>
+<body>
+
+    <h2>تسجيل الدخول عبر رقم الهاتف</h2>
+
+    <!-- 1. نموذج إدخال البيانات -->
+    <form id="phoneForm">
+        <label for="phone">رقم الهاتف:</label><br>
+        <input type="tel" id="phone" name="phone" placeholder="+966500000000" required><br><br>
+        <button type="submit">إرسال الرمز</button>
+    </form>
+
+    <p id="statusMessage"></p>
+
+    <!-- 2. كود السكربت في نفس الصفحة -->
+    <script>
+        // الاستماع لحدث إرسال النموذج
+        document.getElementById('phoneForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // منع الصفحة من إعادة التحميل
+
+            // أخذ الرقم الذي أدخله المستخدم
+            const phoneNumber = document.getElementById('phone').value;
+
+            // تحديد رابط الخادم الخاص بك (API Endpoint)
+            const serverUrl = 'https://denden.my.taker.io/api/v3/auth/authorize'; 
+
+            // تجهيز البيانات على هيئة Object (JSON)
+            const payload = {
+                phone_number: phoneNumber
+            };
+
+            // إرسال الطلب إلى الخادم
+            fetch(serverUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload) // تحويل Object إلى صيغة JSON نصية
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('statusMessage').innerText = "تم الإرسال بنجاح!";
+                console.log('استجابة الخادم:', data);
+            })
+            .catch(error => {
+                document.getElementById('statusMessage').innerText = "حدث خطأ أثناء الإرسال.";
+                console.error('خطأ:', error);
+            });
+        });
+    </script>
+
+</body>
+</html>
