@@ -2,56 +2,49 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>صفحة تسجيل الدخول</title>
+    <title>تجربة إرسال JSON</title>
 </head>
 <body>
 
-    <h2>تسجيل الدخول عبر رقم الهاتف</h2>
+    <h3>إرسال رقم الهاتف</h3>
 
-    <!-- 1. نموذج إدخال البيانات -->
-    <form id="phoneForm">
-        <label for="phone">رقم الهاتف:</label><br>
-        <input type="tel" id="phone" name="phone" placeholder="+966500000000" required><br><br>
-        <button type="submit">إرسال الرمز</button>
-    </form>
+    <!-- حقل الإدخال والزر -->
+    <input type="tel" id="userPhone" placeholder="+966500000000">
+    <button onclick="sendData()">إرسال</button>
 
-    <p id="statusMessage"></p>
+    <p id="result"></p>
 
-    <!-- 2. كود السكربت في نفس الصفحة -->
     <script>
-        // الاستماع لحدث إرسال النموذج
-        document.getElementById('phoneForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // منع الصفحة من إعادة التحميل
+        function sendData() {
+            // 1. قراءة الرقم من الحقل
+            const phoneInput = document.getElementById('userPhone').value;
 
-            // أخذ الرقم الذي أدخله المستخدم
-            const phoneNumber = document.getElementById('phone').value;
-
-            // تحديد رابط الخادم الخاص بك (API Endpoint)
-            const serverUrl = 'https://denden.my.taker.io/api/v3/auth/authorize'; 
-
-            // تجهيز البيانات على هيئة Object (JSON)
-            const payload = {
-                phone_number: phoneNumber
+            // 2. تجهيز البيانات كـ Object
+            const dataObject = {
+                phone_number: phoneInput
             };
 
-            // إرسال الطلب إلى الخادم
-            fetch(serverUrl, {
+            // 3. تحديد رابط الخادم الخاص بك (استبدله برابطك المحلي أو الخاص بموقعك)
+            const myServerUrl = 'https://denden.my.taker.io/api/v3/auth/authorize'; // رابط تجريبي يعيد لك ما أرسلته
+
+            // 4. إرسال البيانات بصيغة JSON
+            fetch(myServerUrl, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json' // تخبر السيرفر أن البيانات نوعها JSON
                 },
-                body: JSON.stringify(payload) // تحويل Object إلى صيغة JSON نصية
+                body: JSON.stringify(dataObject) // تحويل الـ Object إلى نص JSON
             })
             .then(response => response.json())
-            .then(data => {
-                document.getElementById('statusMessage').innerText = "تم الإرسال بنجاح!";
-                console.log('استجابة الخادم:', data);
+            .then(result => {
+                console.log('استجابة السيرفر:', result);
+                document.getElementById('result').innerText = 'تم الإرسال بنجاح!';
             })
             .catch(error => {
-                document.getElementById('statusMessage').innerText = "حدث خطأ أثناء الإرسال.";
                 console.error('خطأ:', error);
+                document.getElementById('result').innerText = 'حدث خطأ في الإرسال.';
             });
-        });
+        }
     </script>
 
 </body>
