@@ -7,41 +7,48 @@
 <title>استرجاع كلمة المرور</title>
 
 <style>
-body{
-    font-family:Arial;
-    background:#f2f2f2;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.box{
-    background:white;
-    padding:25px;
-    width:320px;
-    border-radius:15px;
-    text-align:center;
-    box-shadow:0 0 10px #ccc;
+.box {
+    background: white;
+    width: 320px;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px #ccc;
+    text-align: center;
 }
 
-input,button{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    box-sizing:border-box;
-    border-radius:8px;
-    font-size:16px;
+input, button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    box-sizing: border-box;
+    font-size: 16px;
+    border-radius: 8px;
 }
 
-input{
-    border:1px solid #ccc;
+input {
+    border: 1px solid #ccc;
 }
 
-button{
-    background:#007bff;
-    color:white;
-    border:0;
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#result {
+    margin-top: 15px;
+    word-break: break-word;
 }
 </style>
 
@@ -53,48 +60,51 @@ button{
 
 <h3>نسيت كلمة المرور</h3>
 
-<input id="phone" placeholder="رقم الجوال">
+<input id="phone" type="text" placeholder="رقم الجوال">
 
 <button onclick="send()">إرسال</button>
 
-<p id="result"></p>
+<div id="result"></div>
 
 </div>
 
 
 <script>
 
-async function send(){
+function send(){
 
-let phone=document.getElementById("phone").value;
-let result=document.getElementById("result");
+    let phone = document.getElementById("phone").value;
+    let result = document.getElementById("result");
 
-result.innerHTML="جاري الإرسال...";
+    if(!phone){
+        result.innerHTML = "اكتب رقم الجوال";
+        return;
+    }
 
-
-try{
-
-let res=await fetch("send.php",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-email:phone
-})
-});
+    result.innerHTML = "جاري الإرسال...";
 
 
-let data=await res.json();
+    fetch("send.php", {
+        method:"POST",
+        headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+        },
+        body:"email=" + encodeURIComponent(phone)
+    })
 
-result.innerHTML=data.message || JSON.stringify(data);
+    .then(response => response.json())
 
+    .then(data => {
 
-}catch(e){
+        result.innerHTML = JSON.stringify(data);
 
-result.innerHTML="خطأ: "+e.message;
+    })
 
-}
+    .catch(error => {
+
+        result.innerHTML = "خطأ: " + error.message;
+
+    });
 
 }
 
