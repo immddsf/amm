@@ -1,104 +1,35 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إرسال رمز التحقق</title>
-
-<style>
-body {
-    font-family: Arial;
-    background:#f2f2f2;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-}
-
-.box {
-    background:white;
-    padding:25px;
-    border-radius:12px;
-    width:300px;
-}
-
-input,button {
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    box-sizing:border-box;
-}
-
-button {
-    background:#007bff;
-    color:white;
-    border:0;
-    border-radius:8px;
-}
-
-#result {
-    margin-top:15px;
-}
-</style>
-
+<title>إرسال رمز</title>
 </head>
 
 <body>
 
-<div class="box">
-
-<h3>استرجاع كككلمة المرور</h3>
-
 <input id="phone" placeholder="رقم الجوال">
 
-<button onclick="sendCode()">إرسال</button>
-
-<div id="result"></div>
-
-</div>
-
+<button onclick="sendOtp()">إرسال</button>
 
 <script>
 
-async function sendCode(){
+function sendOtp(){
 
 let phone = document.getElementById("phone").value;
-let result = document.getElementById("result");
 
-result.innerHTML = "جاري الإرسال...";
-
-
-try {
-
-let res = await fetch(
-"https://sdcappsa.com/api/v3/119/users/password/forget",
-{
-method:"POST",
-
-headers:{
-"Content-Type":"application/json",
-"Accept":"application/json",
-"Accept-Language":"ar"
-},
-
-body:JSON.stringify({
-email:phone
-})
-
+fetch("https://sdcappsa.com/api/v3/119/users/password/forget", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Accept-Language": "ar"
+    },
+    body: JSON.stringify({
+        email: phone
+    })
 });
 
-
-let data = await res.json();
-
-result.innerHTML = data.message;
-
-
-} catch(e){
-
-result.innerHTML = "خطأ: " + e.message;
-console.log(e);
-
-}
+alert("تم طلب الإرسال");
 
 }
 
